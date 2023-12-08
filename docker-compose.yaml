@@ -1,0 +1,26 @@
+version: "3.6"
+services:
+  mysql:
+    image: mysql
+    ports:
+      - ${PORT}:3306
+    volumes:
+      - ./datos/mysql:/var/lib/mysql
+      - ./datos/base_datos.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_USER=${USER_}
+      - MYSQL_PASSWORD=${PASSWORD}
+      - MYSQL_DATABASE=${DATABASE}
+      - MYSQL_ROOT_PASSWORD=${PASSWORD_ROOT}
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - ${PORT_PHPMYADMIN}:80
+    depends_on:
+      - mysql
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+
+
+

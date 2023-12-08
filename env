@@ -1,0 +1,7 @@
+USER_="alumno_nett"
+PASSWORD="password_nett"
+HOST=127.0.0.1
+PORT=23306
+DATABASE=usuarios
+PASSWORD_ROOT=root12345
+PORT_PHPMYADMIN=8100
