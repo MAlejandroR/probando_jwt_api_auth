@@ -49,6 +49,7 @@ class DB
             $stmt = $this->con->prepare($sentencia);
             $stmt->execute();
 
+
             if ($stmt->rowCount() == 0) {
                 $pass_maria = password_hash("maria", PASSWORD_BCRYPT);
                 $pass_pedro = password_hash("pedro", PASSWORD_BCRYPT);
@@ -63,7 +64,9 @@ class DB
 FIN;
                 $stmt = $this->con->prepare($sentencia);
                 $stmt->execute();
-            }
+                return "Se han insertado". $stmt->rowCount()." filas";
+            }else
+                return "Ya había filas insertadas";
 
         } catch (\PDO_EXCPETION $e) {
 
