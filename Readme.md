@@ -1,25 +1,26 @@
 # Creación de una API con php para autenticar
 
-Este es un proyecto para crear una api para autenticar     
-Esta api retornará un jwt si las credenciales recibidas son correctas    
+Este es un proyecto para crear una api para autenticar      
+Esta api retornará un jwt si las credenciales recibidas son correctas     
 En sí mismo el proyecto utiliza diferentes tecnologías (docker, React en front, PHP en back con composer ).   
 
-
-## Poner en marcha el proyecto
-1. Descargarlo (clonándolo o haciendo un fork)   
+ 
+## Poner en marcha el proyecto  
+1. Descargarlo (clonándolo o haciendo un fork)        
 
 ```git clone https://github.com/MAlejandroR/probando_jwt_api_auth.git ```
 
 2. Copia el fichero __.env__
- Copia el fichero env a .env para que se usen las variables de entorno creadas
- Puedes modificar los valores según desees:
- ```cp env .env```
+ Copia el fichero env a .env para que se usen las variables de entorno creadas    
+ Puedes modificar los valores según desees:      
 
-En el terminal en la carpeta donde hayas descargado el proyecto, que estará el fichero ___docker-compose.yaml___ levanta los contenedores creados. 
+```cp env .env```
+
+En el terminal en la carpeta donde hayas descargado el proyecto, que estará el fichero ___docker-compose.yaml___ levanta los contenedores creados.    
 ``` docker compose up ```
 
-3. Para crear usuarios se aporta un pequeño script que debes de ejectuar desde el navegador. Si ya estuvieran no los creará.
-   4. Creará 4 usuarios: maria, luis, pedro y lourdes con el mismo password que el nombre
+3. Para crear usuarios se aporta un pequeño script que debes de ejectuar desde el navegador. Si ya estuvieran no los creará.    
+   4. Creará 4 usuarios: maria, luis, pedro y lourdes con el mismo password que el nombre     
 ````bash
    http://localhost/api/inserta_usuarios.php 
 ````

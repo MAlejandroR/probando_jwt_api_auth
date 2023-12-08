@@ -8,11 +8,23 @@ use Database\JWTHandler;
 use Dotenv\Dotenv;
 use Firebase\JWT;
 
-header("Access-Control-Allow-Origin: *");
+error_log("Solicitud Option!!!! \n",3,"log.txt");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    // La solicitud OPTIONS no necesita más procesamiento
+    error_log("Solicitud Option!!!! \n",3,"log.txt");
+        header("Access-Control-Allow-Origin: http://localhost:3000");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+        header("Access-Control-Allow-Credentials: true");
+        exit; // Salir temprano para las solicitudes OPTIONS
+    }
+
+header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Headers: application/json");
 header("Access-Control-Allow-Credentials: true");
+
 
 //Para tracear datos
 $datos  = print_r($_POST,1);
