@@ -18,11 +18,15 @@ En sí mismo el proyecto utiliza diferentes tecnologías (docker, React en front
 
 En el terminal en la carpeta donde hayas descargado el proyecto, que estará el fichero ___docker-compose.yaml___ levanta los contenedores creados.    
 ``` docker compose up ```
+Para acceder http://localhost8080 Si le pasas un usuario registrado debería de retornar un token    
+http://localhost8081 Para acceder a phpmyadmin (ver credenciales en el ficher ___.env___)    
+
+
 
 3. Para crear usuarios se aporta un pequeño script que debes de ejectuar desde el navegador. Si ya estuvieran no los creará.    
    4. Creará 4 usuarios: maria, luis, pedro y lourdes con el mismo password que el nombre     
 ````bash
-   http://localhost/api/inserta_usuarios.php 
+   http://localhost:8080/inserta_usuarios.php 
 ````
 También podrías realizar esta acción desde el front. Retorna un json (mira el código)
 
@@ -37,7 +41,7 @@ Levantará por el puerto 3000
 
 ## docker
 Creamos un docker-compose-yaml para establecer el ambiente de mysql.    
-Se abre el puerto 23306 para mysql y el 8100 php phpmyadmin
+Se abre el puerto 23306 para mysql y el 8081 php phpmyadmin. En realidad el 23306 no se usa, ya que accede directamente al contenedor
 
 Para las variables utilizamos un fichero ___.env___ que utilizaremos también para la conexión de la base de datos.
 ## Librerías

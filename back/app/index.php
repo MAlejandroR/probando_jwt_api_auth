@@ -29,10 +29,7 @@ error_log("Acceso $hora \n", 3, "log.txt");
 error_log("Datos: -$datos-", 3, "log.txt");
 error_log("\n", 3, "log.txt");
 
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Credentials: true");
+
 
 
 //ini_set("display_errors", true);
