@@ -12,21 +12,29 @@ class DB
     {
         $host = $_ENV['HOST'];
         $password = $_ENV['PASSWORD'];
-        $port = $_ENV['PORT'];
+        $port = $_ENV['PORT_MYSQL'];
         $user = $_ENV['USER_'];
         $database = $_ENV['DATABASE'];
-        $dsn = "mysql:host=$host;port=$port;dbname=$database;charset=utf8mb4";
+        $dsn = "mysql:host=$host;dbname=$database;charset=utf8mb4";
+//        echo "<pre>";
+//        var_dump($dsn);
+//        var_dump($user);
+//        var_dump($password);
+//        echo "</pre>";
 
         try {
             $this->con = new \PDO($dsn, $user, $password);
             $this->con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
         } catch (\PDOException $e) {
+//            var_dump("<pre>$e</pre>");
             echo "Error de conexión: " . $e->getMessage();
         }
     }
 
     public function validar_usuario($nombre, $password)
     {
+        error_log("Validando usuario -$nombre- -$password-  \n",3,"log.txt");
         $sentencia = "select *  from usuarios where nombre =:nombre";
         $stmt = $this->con->prepare($sentencia);
         $stmt->execute([":nombre" => $nombre]);

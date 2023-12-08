@@ -3,7 +3,7 @@
 namespace Database;
 use Firebase\JWT\JWT;
 
-require __DIR__."/../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 class JWTHandler
 {
@@ -19,6 +19,7 @@ class JWTHandler
     static function generarToken($data)
     {
         $token = JWT::encode($data, self::$key,"HS256");
+        error_log($token,3,"log.txt");
         return $token;
     }
 
