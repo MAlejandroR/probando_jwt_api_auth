@@ -8,72 +8,45 @@ use Database\JWTHandler;
 
 use Dotenv\Dotenv;
 use Firebase\JWT;
-$hora = date("H:i:s");
-error_log("Accediendo  $hora !!!! \n", 3, "log.txt");
 
-
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    // La solicitud OPTIONS no necesita más procesamiento
-    $hora = date("H:i:s");
-    error_log("Solicitud Option $hora !!!! \n", 3, "log.txt");
-    header("Access-Control-Allow-Origin: http://localhost:3000");
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type");
-    header("Access-Control-Allow-Credentials: true");
-    exit(); // Salir temprano para las solicitudes OPTIONS
-}
-
-
-//Para tracear datos
-$datos = print_r($_POST, 1);
-$hora = date("H:i:s");
-error_log("Acceso $hora \n", 3, "log.txt");
-error_log("Datos: -$datos-", 3, "log.txt");
-error_log("\n", 3, "log.txt");
-
-
-
-
-//ini_set("display_errors", true);
-//error_reporting(E_ALL);
-
-$dotenv = Dotenv::createImmutable(__DIR__."/docker/");
+$dotenv= Dotenv::createImmutable(__DIR__."/docker");
 $dotenv->load();
 
 
+$hora = date("H:i:s");
+error_log("Acceso nuevo  $hora  \n", 3, "log.txt");
+error_log("==============================\n", 3, "log.txt");
+
+
+
+//if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+//    // La solicitud OPTIONS no necesita más procesamiento
+//    $hora = date("H:i:s");
+//    error_log("Solicitud Option $hora !!!! \n", 3, "log.txt");
+//    header("Access-Control-Allow-Origin: http://localhost:3000");
+//    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+//    header("Access-Control-Allow-Headers: Content-Type");
+//    header("Access-Control-Allow-Credentials: true");
+//    exit(); // Salir temprano para las solicitudes OPTIONS
+//}
+
+$method = $_SERVER['REQUEST_METHOD'];
 $db = new DB();
-
-//Porblema 1, no lee los datos de post
-$usuario = htmlspecialchars(filter_input(INPUT_POST, 'usuario'));
-$password = filter_input(INPUT_POST, 'password');
-
-JWTHandler::set_key($password);
-error_log("Antes de valida usuario \n", 3, "log.txt");
-
-if ($db->validar_usuario("maria", "maria")) {
-    error_log("Habiendo validado usuario\n", 3, "log.txt");
-    // Autenticación exitosa, genera un JWT
-
-    //Problema 2 . Tema de CORS para dar acceso, pero no funciona
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type");
-    header("Access-Control-Allow-Credentials: true");
-    header('Content-Type: application/json');
-    error_log("Se han puesto los header \n", 3, "log.txt");
-    $data = ["usuario" => $usuario];
-
-    $token = JWTHandler::generarToken($data);
-    error_log("Generado tocke $token \n", 3, "log.txt");
-    // Retorna el token como respuesta
-    echo json_encode(array('token' => $token));
-} else {
-    error_log("Autentication fallida \n", 3, "log.txt");
-//    header('Content-Type: application/json');
-    // Autenticación fallida
-  //  header('HTTP/1.0 401 Unauthorized');
-    echo json_encode(array('error' => 'Autenticación fallida'));
+switch ($method){
+    case "GET":
+        $id = $_GET['id']??null;
+        $datos = is_null($id)?$db->get_usuarios():$db->get_usuario($id) ;
+        echo json_encode($datos);
+        break;
+    case "POST":
+        $user = $_POST['usuario'];
+        $pass = $_POST['password'];
+        $datos = is_null($user)?$db->get_usuarios():$db->get_usuario($user) ;
+        echo json_encode($datos);
+        break;
 }
 
+$hora = date("H:i:s");
+error_log("Fin consulta\n", 3, "log.txt");
+error_log("_______________________________________\n", 3, "log.txt");
 
-?>

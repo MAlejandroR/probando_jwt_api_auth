@@ -1,13 +1,19 @@
 <?php
-echo __DIR__;
-require __DIR__."/vendor/autoload.php";
 
+require "vendor/autoload.php";
 use Database\DB;
 use Dotenv\Dotenv;
 use Database\JWTHandler;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+
+//ini_set("display_errors", true);
+//error_reporting(E_ALL);
+
+$dotenv = Dotenv::createImmutable(__DIR__."/docker/");
 $dotenv->load();
+
+
+
 
 
 $db = new DB();

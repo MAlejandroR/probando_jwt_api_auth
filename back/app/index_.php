@@ -58,12 +58,12 @@ switch ($opcion) {
     <title>Document</title>
 </head>
 <body>
-<form action="index.php" method="post">
+<form action="auth.php" method="post">
     Nombre <input type="text" name="nombre" id="">
     Password <input type="text" name="password" id="">
     <input type="submit" value="Validar" name="submit">
 </form>
-<form action="index.php" method="post">
+<form action="auth.php" method="post">
     <input type="submit" value="Insertar Datos" name="submit">
 </form>
 <?= $msj ?? "" ?>

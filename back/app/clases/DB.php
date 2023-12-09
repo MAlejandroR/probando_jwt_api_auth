@@ -25,10 +25,13 @@ class DB
         try {
             $this->con = new \PDO($dsn, $user, $password);
             $this->con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            error_log("Conectado a $database",3,"log.txt");
 
         } catch (\PDOException $e) {
 //            var_dump("<pre>$e</pre>");
-            echo "Error de conexión: " . $e->getMessage();
+            error_log("Problemas conectando".$e->getMessage()."\n",3,"log.txt");
+            echo json_encode(["error"=>"Error conectando ".$e->getMessage()]);
+            exit;
         }
     }
 
@@ -43,7 +46,7 @@ class DB
             error_log("Usuario  -$nombre- Encontrado  \n",3,"log.txt");
             $usuario = $stmt->fetch(\PDO::FETCH_OBJ);
 
-            error_log("Password  -$usuario->password-   \n",3,"log.txt");
+            error_log("Password  -$usuario->password- con -$password-   \n",3,"log.txt");
 
             if (password_verify($password, $usuario->password)){
                 error_log("Password  -$usuario->password-   OK \n",3,"log.txt");
@@ -97,7 +100,17 @@ FIN;
         $stmt = $this->con->prepare($query);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
+    }
+    public function get_usuario($id)
+    {
+        $query = "SELECT * FROM usuarios where id = :id";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute([":id"=>$id]);
+        if ($stmt->rowCount()>0)
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        else
+            return ["error"=>"No existe usuario $id"];
     }
 }
