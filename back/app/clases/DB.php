@@ -40,12 +40,20 @@ class DB
         $stmt->execute([":nombre" => $nombre]);
 
         if ($stmt->rowCount() > 0) {
+            error_log("Usuario  -$nombre- Encontrado  \n",3,"log.txt");
             $usuario = $stmt->fetch(\PDO::FETCH_OBJ);
 
-            if (password_verify($password, $usuario->password))
+            error_log("Password  -$usuario->password-   \n",3,"log.txt");
+
+            if (password_verify($password, $usuario->password)){
+                error_log("Password  -$usuario->password-   OK \n",3,"log.txt");
                 return true;
-            else
+            }
+
+            else{
+                error_log("Password  -$usuario->password- NOOOOO   OK \n",3,"log.txt");
                 return false;
+            }
         }
         return false;
     }

@@ -1,11 +1,11 @@
 version: "3.6"
 services:
   apache:
-    build: ./apache
+    build: apache
     ports:
       - ${PORT_APACHE}:80
     volumes:
-      - ./app:/var/www/html
+      - ./../../app:/var/www/html
     depends_on:
       - mysql
   mysql:
@@ -13,8 +13,8 @@ services:
     ports:
       - ${PORT_MYSQL}:3306
     volumes:
-      - ./datos/mysql:/var/lib/mysql
-      - ./datos/base_datos.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./../../datos/mysql:/var/lib/mysql
+      - ./../../datos/base_datos.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MYSQL_USER=${USER_}
       - MYSQL_PASSWORD=${PASSWORD}

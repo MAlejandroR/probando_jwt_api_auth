@@ -18,9 +18,15 @@ class JWTHandler
     public
     static function generarToken($data)
     {
-        $token = JWT::encode($data, self::$key,"HS256");
-        error_log($token,3,"log.txt");
-        return $token;
+        try {
+            $token = JWT::encode($data, self::$key, "HS256");
+            error_log("Generado el token: $token\n", 3, "log.txt");
+            return $token;
+        } catch (Exception $e) {
+            error_log("Error al generar el token: " . $e->getMessage() . "\n", 3, "log.txt");
+            return null; // O manejar el error de alguna manera
+        }
+
     }
 
     public
