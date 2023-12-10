@@ -2,6 +2,8 @@
 
 namespace Database;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 
 require __DIR__ . "/../vendor/autoload.php";
 
@@ -20,7 +22,11 @@ class JWTHandler
     {
         try {
             $token = JWT::encode($data, self::$key, "HS256");
+            $decoded = self::verificarToken($token);
+
             error_log("Generado el token: $token\n", 3, "log.txt");
+            $decoded = print_r($decoded,1);
+            error_log("Recien decodificado : $decoded\n", 3, "log.txt");
             return $token;
         } catch (Exception $e) {
             error_log("Error al generar el token: " . $e->getMessage() . "\n", 3, "log.txt");
@@ -33,9 +39,15 @@ class JWTHandler
     static function verificarToken($token)
     {
         try {
-            $decoded = JWT::decode($token, self::$key, array('HS256'));
+            error_log("en verificar token : -$token-\n",3,"log.txt");
+            error_log("en verificar key :-".self::$key."- \n",3,"log.txt");
+
+            $decoded = JWT::decode($token, new Key(self::$key, 'HS256'));
+            error_log("en verificar toekn después:\n",3,"log.txt");
             return $decoded;
+
         } catch (Exception $e) {
+            error_log("en verificar token sin exito  :".$e->getMessage()." \n",3,"log.txt");
             return null;
         }
     }

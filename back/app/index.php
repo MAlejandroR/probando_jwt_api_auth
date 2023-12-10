@@ -44,6 +44,7 @@ switch ($method){
         $datos = is_null($user)?$db->get_usuarios():$db->get_usuario($user) ;
         echo json_encode($datos);
         break;
+
 }
 
 $hora = date("H:i:s");

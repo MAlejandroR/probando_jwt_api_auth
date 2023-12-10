@@ -50,7 +50,7 @@ class DB
 
             if (password_verify($password, $usuario->password)){
                 error_log("Password  -$usuario->password-   OK \n",3,"log.txt");
-                return true;
+                return $usuario->rol;
             }
 
             else{
@@ -75,11 +75,11 @@ class DB
                 $pass_lourdes = password_hash("lourdes", PASSWORD_BCRYPT);
                 $pass_luis = password_hash("luis", PASSWORD_BCRYPT);
                 $sentencia = <<<FIN
-            INSERT INTO usuarios (nombre, password) VALUES
-              ("maria", "$pass_maria"),
-              ("pedro", "$pass_pedro"),
-              ("lourdes", "$pass_lourdes"),
-              ("luis", "$pass_luis");
+            INSERT INTO usuarios (nombre, password,rol) VALUES
+              ("maria", "$pass_maria","admin"),
+              ("pedro", "$pass_pedro","admin"),
+              ("lourdes", "$pass_lourdes","gestor"),
+              ("luis", "$pass_luis","usuario");
 FIN;
                 $stmt = $this->con->prepare($sentencia);
                 $stmt->execute();

@@ -47,10 +47,11 @@ $db = new DB();
 $usuario = htmlspecialchars(filter_input(INPUT_POST, 'usuario'));
 $password = filter_input(INPUT_POST, 'password');
 
-JWTHandler::set_key($password);
+$key = $_ENV['KEY'];
+JWTHandler::set_key($key);
 error_log("Antes de valida usuario \n", 3, "log.txt");
-
-if ($db->validar_usuario($usuario, $password)) {
+$rol =$db->validar_usuario($usuario, $password);
+if ($rol!==false ) {
     error_log("Habiendo validado usuario\n", 3, "log.txt");
     // Autenticación exitosa, genera un JWT
 
@@ -61,7 +62,10 @@ if ($db->validar_usuario($usuario, $password)) {
 //    header("Access-Control-Allow-Credentials: true");
 //    header('Content-Type: application/json');
     error_log("Se han puesto los header \n", 3, "log.txt");
-    $data = ["usuario" => $usuario];
+    $data = ["usuario" => $usuario,
+        "rol"=>$rol,
+        "exp"=>time() + 3600
+    ];
 
     $token = JWTHandler::generarToken($data);
     error_log("Generado tocke $token \n", 3, "log.txt");
