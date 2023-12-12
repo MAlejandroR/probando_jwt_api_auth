@@ -19,4 +19,19 @@ $dotenv->load();
 $db = new DB();
 
 $rtdo =$db->insertar_datos();
-echo json_encode(array('acción' => "Insertando datos, mensaje : -$rtdo-"));
+if ($rtdo === false) {
+    http_response_code(401);
+    $msj= ['status'=> 'error',
+        'message'=> 'No se ha podido realizar la inserción',
+    ];
+    echo json_encode($msj);
+}
+else {
+    http_response_code(200);
+    $msj= ['status'=> 'success',
+          'message'=> $rtdo,
+    ];
+    echo json_encode($msj);
+}
+
+

@@ -21,6 +21,8 @@ class JWTHandler
     static function generarToken($data)
     {
         try {
+            self::set_key($_ENV['KEY']);
+
             $token = JWT::encode($data, self::$key, "HS256");
             $decoded = self::verificarToken($token);
 
@@ -47,6 +49,7 @@ class JWTHandler
             return $decoded;
 
         } catch (Exception $e) {
+   
             error_log("en verificar token sin exito  :".$e->getMessage()." \n",3,"log.txt");
             return null;
         }

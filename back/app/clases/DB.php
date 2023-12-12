@@ -50,7 +50,7 @@ class DB
 
             if (password_verify($password, $usuario->password)){
                 error_log("Password  -$usuario->password-   OK \n",3,"log.txt");
-                return $usuario->rol;
+                return $usuario;
             }
 
             else{
@@ -89,7 +89,7 @@ FIN;
 
         } catch (\PDO_EXCPETION $e) {
 
-            echo "<h1>Error " . $e->getmessage . "</h1>";
+            return false;
         }
     }
 
@@ -111,6 +111,6 @@ FIN;
         if ($stmt->rowCount()>0)
             return $stmt->fetch(\PDO::FETCH_ASSOC);
         else
-            return ["error"=>"No existe usuario $id"];
+            return false;
     }
 }
