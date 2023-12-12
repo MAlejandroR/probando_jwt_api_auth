@@ -16,6 +16,7 @@ $hora = date("H:i:s");
 error_log("Accediendo  $hora !!!! \n", 3, "log.txt");
 $usuario = $_POST['usuario'];
 $password = $_POST['password'];
+var_dump($_SERVER['REQUEST_METHOD']);
 $db = new DB();
 $msj = Authenticar::autenticar($usuario, $password, $db);
 

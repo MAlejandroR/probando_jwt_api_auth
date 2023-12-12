@@ -1,6 +1,7 @@
 <?php
 
 namespace Database;
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -27,7 +28,7 @@ class JWTHandler
             $decoded = self::verificarToken($token);
 
             error_log("Generado el token: $token\n", 3, "log.txt");
-            $decoded = print_r($decoded,1);
+            $decoded = print_r($decoded, 1);
             error_log("Recien decodificado : $decoded\n", 3, "log.txt");
             return $token;
         } catch (Exception $e) {
@@ -41,16 +42,21 @@ class JWTHandler
     static function verificarToken($token)
     {
         try {
-            error_log("en verificar token : -$token-\n",3,"log.txt");
-            error_log("en verificar key :-".self::$key."- \n",3,"log.txt");
+            error_log("en verificar token : -$token-\n", 3, "log.txt");
+            error_log("en verificar key :-" . self::$key . "- \n", 3, "log.txt");
 
             $decoded = JWT::decode($token, new Key(self::$key, 'HS256'));
-            error_log("en verificar toekn después:\n",3,"log.txt");
+            error_log("en verificar toekn después:\n", 3, "log.txt");
             return $decoded;
 
         } catch (Exception $e) {
-   
-            error_log("en verificar token sin exito  :".$e->getMessage()." \n",3,"log.txt");
+
+            error_log("en verificar token sin exito  :" . $e->getMessage() . " \n", 3, "log.txt");
+            return null;
+
+        } catch (ExpiredException $e) {
+            // Token ha caducado
+            error_log("Token caducado: " . $e->getMessage() . " \n", 3, "log.txt");
             return null;
         }
     }

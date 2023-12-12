@@ -69,6 +69,7 @@ switch ($method) {
                 exit;
             }
                 http_response_code(200);
+            var_dump($usuario);
                 echo json_encode($usuario);
                 exit;
 

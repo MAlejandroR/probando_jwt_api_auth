@@ -8,7 +8,7 @@ class Authenticar
     public static function autenticar($usuario, $password, DB $db):array|bool
     {
         $user = $db->validar_usuario($usuario, $password);
-        if (is_null($user)) {
+        if (($user===false)||is_null($user)) {
             return false;
         } else {
 
