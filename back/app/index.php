@@ -5,6 +5,8 @@ require "vendor/autoload.php";
 
 use Database\DB;
 use Database\JWTHandler;
+use Database\Authenticar;
+
 
 use Dotenv\Dotenv;
 use Firebase\JWT;
@@ -51,7 +53,7 @@ switch ($method) {
                 exit;
             }
             $usuario = \Database\Authenticar::validar_autenticacion();
-            if ($usuario ==null){ //No hay token, usuario no registrado
+            if ($usuario == null) { //No hay token, usuario no registrado
                 http_response_code(403);
                 $msj = [
                     'status' => 'Forbbiden',
@@ -68,23 +70,125 @@ switch ($method) {
                 echo json_encode($msj);
                 exit;
             }
-                http_response_code(200);
+            http_response_code(200);
             var_dump($usuario);
-                echo json_encode($usuario);
-                exit;
+            echo json_encode($usuario);
+            exit;
+
+        }
+        break;
+    case "DELETE": //solo admin puede
+        $autorizacion = Authenticar::validar_usuario_rol("admin");
+        if (!$autorizacion) {
+            http_response_code(403);
+            $msj = [
+                'status' => 'Forbbiden',
+            ];
+            echo json_encode($msj);
+            exit;
+        }
+        $id = $_GET['id'];
+        $rtdo = $db->delete_usuario($id);
+        if ($rtdo){
+            http_response_code(204);
+            $msj = [
+                'status' => "Usuario $id eliminado ",
+            ];
+            echo json_encode($msj);
+            exit;
+        }else{
+            http_response_code(500);
+            $msj = [
+                'status' => "No se ha podido actualziar el usuario $id" ,
+            ];
+            echo json_encode($msj);
+            exit;
 
         }
 
-
-
-        break;
-    case "POST":
+    case "POST": //solo admin puede
+        $autorizacion = Authenticar::validar_usuario_rol("admin");
+        if (!$autorizacion) {
+            http_response_code(403);
+            $msj = [
+                'status' => 'Forbbiden',
+            ];
+            echo json_encode($msj);
+            exit;
+        }
         $user = $_POST['usuario'];
         $pass = $_POST['password'];
-        $datos = is_null($user) ? $db->get_usuarios() : $db->get_usuario($user);
-        echo json_encode($datos);
-        break;
+        $role = $_POST['role'];
+        $rtdo = $db->insertar_usuario($user, $pass, $role);
+        if ($rtdo){
+            http_response_code(201);
+            $msj = [
+                'status' => 'Usuario $user insertado ',
+            ];
+            echo json_encode($msj);
+            exit;
+        }
+    case "PUT":// Es un update solo admin o gestor
+        $autorizacion1 = Authenticar::validar_usuario_rol("admin");
+        $autorizacion2 = Authenticar::validar_usuario_rol("gestor");
+        if (!$autorizacion1 && !$autorizacion2) {
+            http_response_code(403);
+            $msj = [
+                'status' => 'Forbbiden',
+            ];
+            echo json_encode($msj);
+            exit;
+        }
 
+
+// Obtener los datos del cuerpo de la solicitud
+        $datos = json_decode(file_get_contents("php://input"), true);
+
+
+        $user = $datos['usuario'];
+        $pass = $datos['password'];
+        $role = $datos['role'];
+        $id = $_GET['id'];
+        $rtdo = $db->update_usuario($id, $user, $pass, $role);
+        if ($rtdo){
+            http_response_code(200);
+            $msj = [
+                'status' => "Usuario $user actualizado ",
+            ];
+            echo json_encode($msj);
+            exit;
+        }else{
+            http_response_code(500);
+            $msj = [
+                'status' => "No se ha podido actualziar el usuario $id" ,
+            ];
+            echo json_encode($msj);
+            exit;
+            
+        }
+        break;
+    case "POST":
+        $autorizacion = Authenticar::validar_usuario_rol("admin");
+        if (!$autorizacion) {
+            http_response_code(403);
+            $msj = [
+                'status' => 'Forbbiden',
+            ];
+            echo json_encode($msj);
+            exit;
+        }
+        $user = $_POST['usuario'];
+        $pass = $_POST['password'];
+        $role = $_POST['role'];
+        $rtdo = $db->insertar_usuario($user, $pass, $role);
+        if ($rtdo){
+            http_response_code(201);
+            $msj = [
+                'status' => 'Usuario $user insertado ',
+            ];
+            echo json_encode($msj);
+            exit;
+        }
 }
 
 $hora = date("H:i:s");

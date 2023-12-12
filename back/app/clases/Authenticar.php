@@ -27,6 +27,28 @@ class Authenticar
             return $msj;
         }
     }
+    public  static function validar_usuario_rol($rol){
+        $token = $_SERVER["HTTP_AUTHORIZATION"] ?? $_COOKIE['token']??null;
+        //Si no hay token retorno para un forbbiden
+        if ($token==null)
+            return null;
+        $key = $_ENV['KEY'];
+        error_log("token en sitio.php: -$token-\n",3,"log.txt");
+        try {
+            JWTHandler::set_key($key);
+            $decoded = JWTHandler::verificarToken($token);
+
+            if ($decoded->role ==$rol)
+                return true;
+            else
+                return false;
+           return $decoded->rol==$rol;
+        } catch (Exception $e) {
+// Token inválido
+            return $e;
+        }
+
+}
     public static function validar_autenticacion(){
         $token = $_SERVER["HTTP_AUTHORIZATION"] ?? $_COOKIE['token']??null;
         //Si no hay token retorno para un forbbiden

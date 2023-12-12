@@ -21,15 +21,17 @@ $db = new DB();
 $msj = Authenticar::autenticar($usuario, $password, $db);
 
 if ($msj === false) {
-    http_response_code(401);
     $msj= ['status'=> 'error',
             'message'=> 'Credenciales inválidas. La autenticación ha fallado.',
             'data'=> null
     ];
+    var_dump($msj);
+    http_response_code(401);
     echo json_encode($msj);
 }
 else {
     http_response_code(200);
+    var_dump($msj);
     echo json_encode($msj);
 }
 
